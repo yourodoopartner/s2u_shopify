@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <menuitem name="Shopify"
+                  id="menu_shopify"
+                  sequence="100"/>
+
+        <menuitem id="menu_shopify_orders"
+            name="Orders"
+            sequence="10"
+            parent="s2u_shopify.menu_shopify"/>
+
+        <menuitem id="menu_shopify_products"
+            name="Products"
+            sequence="50"
+            parent="s2u_shopify.menu_shopify"/>
+
+        <menuitem action="sale.product_template_action"
+                  id="menu_product_template_action"
+                  parent="s2u_shopify.menu_shopify_products"
+                  sequence="1" />
+
+        <menuitem id="menu_shopify_configuration"
+            name="Configuration"
+            sequence="100"
+            parent="s2u_shopify.menu_shopify"/>
+
+    </data>
+</openerp>
+

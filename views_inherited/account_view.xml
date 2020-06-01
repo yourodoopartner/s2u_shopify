@@ -1,0 +1,44 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="view_account_form">
+            <field name="inherit_id" ref="account.view_account_form"/>
+            <field name="model">account.account</field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='deprecated']" position="after">
+                    <field name="moneybird_ledger_id" options="{'no_create': True, 'no_open': True}" />
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_account_list">
+            <field name="inherit_id" ref="account.view_account_list"/>
+            <field name="model">account.account</field>
+            <field name="arch" type="xml">
+                <xpath expr="/tree/field[@name='company_id']" position="after">
+                    <field name="moneybird_ledger_id" />
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_tax_form">
+            <field name="inherit_id" ref="account.view_tax_form"/>
+            <field name="model">account.tax</field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='cash_basis_transition_account_id']" position="after">
+                    <field name="moneybird_tax_rate_id" options="{'no_create': True, 'no_open': True}" />
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_tax_tree">
+            <field name="inherit_id" ref="account.view_tax_tree"/>
+            <field name="model">account.tax</field>
+            <field name="arch" type="xml">
+                <xpath expr="/tree/field[@name='active']" position="before">
+                    <field name="moneybird_tax_rate_id" />
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

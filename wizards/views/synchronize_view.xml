@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="wizard_sync_products_view" model="ir.ui.view">
+        <field name="model">s2u.shopify.wizard.sync.products</field>
+        <field name="arch" type="xml">
+            <form string="Synchronize Products to Shopify">
+                <group>
+                    <group>
+                        <field name="instance_id" />
+                    </group>
+                    <group></group>
+                </group>
+                <footer>
+                    <button name="do_synchronize" string="Synchronize" type="object" class="oe_highlight"/>
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wizard_sync_products" model="ir.actions.act_window">
+        <field name="name">Synchronize</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">s2u.shopify.wizard.sync.products</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="wizard_sync_products_view"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

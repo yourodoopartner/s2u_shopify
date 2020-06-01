@@ -1,0 +1,262 @@
+<odoo>
+    <data>
+        <!-- Product Template Mapping -->
+        <record model="ir.ui.view" id="product_template_mapping_search_view">
+            <field name="model">s2u.shopify.mapping.template</field>
+            <field name="arch" type="xml">
+                <search string="Search">
+                    <field name="instance_id" />
+                    <field name="shopify_id" />
+                    <field name="product_tmpl_id" />
+                </search>
+            </field>
+        </record>
+
+        <record id="product_template_mapping_form" model="ir.ui.view">
+            <field name="model">s2u.shopify.mapping.template</field>
+            <field name="arch" type="xml">
+                <form string="Shopify Product Template Mapping">
+                    <header>
+                        <button name="do_action_create" type="object" string="Create in Shopify" class="oe_read_only" states="draft,nomatch" confirm="Are you sure? This will create the product in Shopify."/>
+                        <button name="do_action_match" type="object" string="Match in Shopify" class="oe_read_only" states="draft,nomatch" />
+                        <button name="do_action_back" type="object" string="Back to Concept" class="oe_read_only" states="link" />
+                        <button name="do_action_inventory" type="object" string="Inventory" class="oe_read_only" states="link"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,link"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="instance_id" />
+                            </group>
+                            <group>
+                                <field name="product_tmpl_id" options="{'no_create': True}" />
+                                <field name="shopify_manual" />
+                                <field name="shopify_id" attrs="{'readonly': ['|', ('shopify_manual', '=', False), ('state', '!=', 'draft')],
+                                                                 'required': [('shopify_manual', '=', True), ('state', '=', 'draft')]}"/>
+                                <field name="use_odoo_inventory" />
+                                <field name="shopify_location_id" attrs="{'readonly': [('use_odoo_inventory', '=', False)]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Mapping">
+                                <field name="mapping_product_ids" nolabel="1" widget="one2many_list" >
+                                    <tree string="Mapping" editable="bottom">
+                                        <field name="product_id" readonly="1" />
+                                        <field name="shopify_manual" invisible="1" />
+                                        <field name="state" invisible="1" />
+                                        <field name="shopify_id" attrs="{'readonly': ['|', ('shopify_manual', '=', False), ('state', '!=', 'draft')],
+                                                                         'required': [('shopify_manual', '=', True), ('state', '=', 'draft')]}" />
+                                        <field name="inventory_item_id" attrs="{'readonly': ['|', ('shopify_manual', '=', False), ('state', '!=', 'draft')],
+                                                                                'required': [('shopify_manual', '=', True), ('state', '=', 'draft')]}" />
+                                        <field name="last_sync_done" />
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="product_template_mapping_tree" model="ir.ui.view">
+            <field name="model">s2u.shopify.mapping.template</field>
+            <field name="arch" type="xml">
+                <tree string="Shopify Product Template Mappings">
+                    <field name="instance_id" />
+                    <field name="product_tmpl_id" />
+                    <field name="shopify_id" />
+                    <field name="use_odoo_inventory" />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_product_template_mapping" model="ir.actions.act_window">
+            <field name="name">Mappings</field>
+            <field name="res_model">s2u.shopify.mapping.template</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="product_template_mapping_tree" />
+        </record>
+
+        <menuitem action="action_product_template_mapping"
+                  id="menu_shopify_product_template_mapping"
+                  parent="s2u_shopify.menu_shopify_products"
+                  sequence="10" />
+
+        <!-- Instance -->
+        <record model="ir.ui.view" id="instance_search_view">
+            <field name="model">s2u.shopify.instance</field>
+            <field name="arch" type="xml">
+                <search string="Search">
+                    <field name="name" />
+                    <field name="shopify_shop" />
+                </search>
+            </field>
+        </record>
+
+        <record id="instance_form" model="ir.ui.view">
+            <field name="model">s2u.shopify.instance</field>
+            <field name="arch" type="xml">
+                <form string="Shopify Instance">
+                    <header>
+				    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" />
+                            </group>
+                            <group>
+                                <field name="shopify_api_key" />
+							    <field name="shopify_password" password="True"/>
+							    <field name="shopify_secret" />
+							    <field name="shopify_shop" />
+                                <field name="shopify_signature" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="instance_tree" model="ir.ui.view">
+            <field name="model">s2u.shopify.instance</field>
+            <field name="arch" type="xml">
+                <tree string="Shopify Instances">
+                    <field name="name" />
+                    <field name="shopify_shop" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_instance" model="ir.actions.act_window">
+            <field name="name">Instances</field>
+            <field name="res_model">s2u.shopify.instance</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="instance_tree" />
+        </record>
+
+        <menuitem action="action_instance" id="menu_shopify_configuration_instance"
+            parent="s2u_shopify.menu_shopify_configuration" sequence="10" />
+
+        <!-- Events -->
+        <record model="ir.ui.view" id="event_search_view">
+            <field name="model">s2u.shopify.event</field>
+            <field name="arch" type="xml">
+                <search string="Search">
+                    <field name="instance_id" />
+                    <field name="name" />
+                    <field name="res_id" />
+                    <field name="state" />
+                </search>
+            </field>
+        </record>
+
+        <record id="event_form" model="ir.ui.view">
+            <field name="model">s2u.shopify.event</field>
+            <field name="arch" type="xml">
+                <form string="Shopify Event" create="false" >
+                    <header>
+                        <button name="do_action_retry" type="object" string="Retry" class="oe_read_only" states="error" />
+                        <button name="do_action_process_event" type="object" string="Process event" class="oe_read_only" states="new,retry" />
+                        <field name="state" widget="statusbar" statusbar_visible="new,processed"/>
+				    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="instance_id" />
+                                <field name="name" />
+                                <field name="res_id" />
+                            </group>
+                            <group>
+                                <field name="shopify_test" />
+							    <field name="event_datetime" />
+                            </group>
+                        </group>
+                        <group string="Message">
+                            <field name="process_message" nolabel="True" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="event_tree" model="ir.ui.view">
+            <field name="model">s2u.shopify.event</field>
+            <field name="arch" type="xml">
+                <tree string="Shopify Events" create="false" edit="false">
+                    <field name="event_datetime" />
+                    <field name="instance_id" />
+                    <field name="name" />
+                    <field name="res_id" />
+                    <field name="state" />
+                    <field name="shopify_test" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_event" model="ir.actions.act_window">
+            <field name="name">Events</field>
+            <field name="res_model">s2u.shopify.event</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="event_tree" />
+        </record>
+
+        <menuitem action="action_event" id="menu_shopify_configuration_event"
+            parent="s2u_shopify.menu_shopify_configuration" sequence="20" />
+
+        <!-- Fiscal Position -->
+        <record model="ir.ui.view" id="fiscal_position_search_view">
+            <field name="model">s2u.shopify.fiscal.position</field>
+            <field name="arch" type="xml">
+                <search string="Search">
+                    <field name="country_id" />
+                </search>
+            </field>
+        </record>
+
+        <record id="fiscal_position_form" model="ir.ui.view">
+            <field name="model">s2u.shopify.fiscal.position</field>
+            <field name="arch" type="xml">
+                <form string="Shopify Event">
+                    <header>
+				    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="country_id" />
+                                <field name="position_id" />
+                            </group>
+                            <group>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="fiscal_position_tree" model="ir.ui.view">
+            <field name="model">s2u.shopify.fiscal.position</field>
+            <field name="arch" type="xml">
+                <tree string="Shopify Events">
+                    <field name="country_id" />
+                    <field name="position_id" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_fiscal_position" model="ir.actions.act_window">
+            <field name="name">Fiscal positions</field>
+            <field name="res_model">s2u.shopify.fiscal.position</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="fiscal_position_tree" />
+        </record>
+
+        <menuitem action="action_fiscal_position" id="menu_shopify_configuration_fiscal_position"
+            parent="s2u_shopify.menu_shopify_configuration" sequence="30" />
+
+    </data>
+</odoo>

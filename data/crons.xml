@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="0">
+        <record id="ir_cron_inventory_synchronization_action" model="ir.cron">
+            <field name="name">Sync. Inventory with Shopify</field>
+            <field name="interval_number">15</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="model_id" ref="model_s2u_shopify_mapping_template"/>
+            <field name="active" eval="True"/>
+            <field name="state">code</field>
+            <field name="code">model.cron_synchronize_inventory()</field>
+        </record>
+
+        <record id="ir_cron_process_events_action" model="ir.cron">
+            <field name="name">Process Shopify Events</field>
+            <field name="interval_number">5</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="model_id" ref="model_s2u_shopify_event"/>
+            <field name="active" eval="True"/>
+            <field name="state">code</field>
+            <field name="code">model.cron_process_events()</field>
+        </record>
+    </data>
+</openerp>
